@@ -19,7 +19,7 @@ const Budget = sequelize.define(
             primaryKey: true
         },
         amount: {
-            type: Sequelize.DECIMAL(16, 2),
+            type: Sequelize.DOUBLE,
             allowNull: false,
             defaultValue: 0
         },

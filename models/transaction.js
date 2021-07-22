@@ -31,7 +31,7 @@ const Transaction = sequelize.define(
             defaultValue: Sequelize.NOW
         },
         amount: {
-            type: Sequelize.DECIMAL(16, 2),
+            type: Sequelize.DOUBLE,
             allowNull: false
         },
         type: {
