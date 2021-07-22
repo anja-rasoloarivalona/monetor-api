@@ -23,12 +23,12 @@ const Wallet = sequelize.define(
             type: Sequelize.STRING(255),
         },
         amount: {
-            type: Sequelize.DECIMAL(16, 2),
+            type: Sequelize.DOUBLE,
             defaultValue: 0,
             allowNull: false
         },
         creditLimit: {
-            type: Sequelize.DECIMAL(16, 2),
+            type: Sequelize.DOUBLE,
             defaultValue: null,
             field: "creditLimit"
         }

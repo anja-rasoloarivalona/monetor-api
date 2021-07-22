@@ -5,6 +5,7 @@ import categories from './categories.js'
 import setup from './setup.js'
 import todo from './todo.js'
 import transaction from './transaction.js'
+import user from './user.js'
 
 const routes = express.Router()
 
@@ -16,5 +17,6 @@ routes.use("/", middleware.authMiddleware)
 routes.use("/setup", setup)
 routes.use("/todo", todo)
 routes.use("/transaction", transaction)
+routes.use("/user", user)
 
 export default routes

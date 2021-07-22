@@ -22,7 +22,11 @@ const signup = async (req, res) => {
                 email: data.email,
                 password: hashedPassword,
                 city: data.city,
-                country: data.country
+                country: data.country,
+                province: data.province,
+                postalCode: data.postalCode,
+                lat: data.lat,
+                lng: data.lng
             })
 
             await acceptTerms({

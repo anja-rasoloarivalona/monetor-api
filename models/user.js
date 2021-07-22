@@ -2,7 +2,7 @@ import Sequelize from 'sequelize';
 import sequelize from "./sequelize.js";
 
 const User = sequelize.define(
-    'User',
+    'user',
     {
         id: {
             type: Sequelize.CHAR(32),
@@ -22,7 +22,12 @@ const User = sequelize.define(
             allowNull: false
         },
         city: Sequelize.STRING(255),
-        country: Sequelize.STRING(255)
+        country: Sequelize.STRING(255),
+        province: Sequelize.STRING(255),
+        postalCode: Sequelize.STRING(255),
+        lat: Sequelize.DOUBLE,
+        lng: Sequelize.DOUBLE,
+        setupAt: Sequelize.DATE
     },
     {   
         timestamps: false,
@@ -31,6 +36,37 @@ const User = sequelize.define(
     }
 )
 
+const UserRelation = sequelize.define(
+    'userRelation',
+    {
+        id: {
+            type: Sequelize.CHAR(32),
+            allowNull: false,
+            primaryKey: true,
+        },
+        fromId: {
+            type: Sequelize.CHAR(32),
+            allowNull: false,
+            primaryKey: true,
+        },
+        toId: {
+            type: Sequelize.CHAR(32),
+            allowNull: false,
+            primaryKey: true
+        },
+        confirmedAt: {
+            type: Sequelize.DATE,
+            defaultValue: null
+        }
+    },
+    {   
+        timestamps: true,
+        tableName: 'UserRelation',
+        freezeTableName: true,
+    }
+)
+
 export {
-    User
+    User,
+    UserRelation
 }
