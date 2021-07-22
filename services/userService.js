@@ -1,4 +1,4 @@
-import { User, UserRelation, Budget, Settings, Wallet, TodoList, Todo, TodoChecklist, Transaction, Category } from '../models/index.js'
+import { User, UserAssociation, Budget, Settings, Wallet, TodoList, Todo, TodoChecklist, Transaction, Category } from '../models/index.js'
 import { generateId } from '../utils/index.js'
 
 const createRelathionship = async data => {
@@ -8,14 +8,14 @@ const createRelathionship = async data => {
 
     const relationShipId = generateId()
 
-    const fromRelation = await UserRelation.create({
+    const fromRelation = await UserAssociation.create({
         id: relationShipId,
         fromId,
         toId,
         confirmedAt: new Date()
     })
 
-    const toRelation = await UserRelation.create({
+    const toRelation = await UserAssociation.create({
         id: relationShipId,
         fromId: toId,
         toId: fromId
@@ -69,7 +69,7 @@ const sanitizeUser = async userId => {
                 }
             },
             {
-                model: UserRelation,
+                model: UserAssociation,
                 as: "contacts",
                 attributes: [
                     "id","confirmedAt"
@@ -94,9 +94,6 @@ const sanitizeUser = async userId => {
         ]
     })
 
-    console.log({
-        user
-    })
 
     return {
         id: user.id,

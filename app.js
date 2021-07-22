@@ -2,6 +2,7 @@ import express  from 'express'
 import http from 'http'
 import dotenv from 'dotenv'
 import routes from './routes/index.js'
+import { initSocket } from './socket/index.js'
 
 dotenv.config()
 
@@ -19,5 +20,7 @@ app.use(express.urlencoded({
 }))
 
 app.use('/', routes)
+
+initSocket(server)
 
 server.listen(port, host, console.log(`Server running on http://${host}:${port}.`));

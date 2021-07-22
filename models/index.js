@@ -1,7 +1,7 @@
 import { Access } from './access.js'
 import { AccessTokens } from './accessTokens.js'
 import { Terms } from './terms.js'
-import { User, UserRelation } from './user.js'
+import { User, UserAssociation } from './user.js'
 import { Category, CategoryLocale } from './category.js'
 import { Budget } from './budget.js'
 import { Wallet } from './wallet.js'
@@ -71,13 +71,13 @@ Transaction.hasOne(Category, {
     as: "category"
 })
 
-User.hasMany(UserRelation, {
+User.hasMany(UserAssociation, {
     sourceKey: "id",
     foreignKey: "toId",
     as: "contacts"
 })
 
-UserRelation.hasOne(User, {
+UserAssociation.hasOne(User, {
     sourceKey: "fromId",
     foreignKey: "id",
 })
@@ -90,7 +90,7 @@ export {
     Budget,
     Terms,
     User,
-    UserRelation,
+    UserAssociation,
     Category,
     CategoryLocale,
     Settings,

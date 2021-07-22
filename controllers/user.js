@@ -1,5 +1,5 @@
 import ev from 'express-validator'
-import { User, UserRelation } from '../models/index.js'
+import { User, UserAssociation } from '../models/index.js'
 import Sequelize from 'sequelize'
 import { createRelathionship } from '../services/userService.js'
 

@@ -36,8 +36,8 @@ const User = sequelize.define(
     }
 )
 
-const UserRelation = sequelize.define(
-    'userRelation',
+const UserAssociation = sequelize.define(
+    'userAssociation',
     {
         id: {
             type: Sequelize.CHAR(32),
@@ -61,12 +61,12 @@ const UserRelation = sequelize.define(
     },
     {   
         timestamps: true,
-        tableName: 'UserRelation',
+        tableName: 'UserAssociation',
         freezeTableName: true,
     }
 )
 
 export {
     User,
-    UserRelation
+    UserAssociation
 }
