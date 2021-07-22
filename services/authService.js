@@ -72,9 +72,14 @@ const verifyToken = (token, res) => {
                 shouldRefreshToken: nbDaysBeforeExpiration > 2
             }
         }
-        return res.error(['TOKEN HAS EXPIRED'], 'Unauthorized', 401)
+        if(res){
+            return res.error(['TOKEN HAS EXPIRED'], 'Unauthorized', 401)
+        }
     }
-    return res.error(['TOKEN IS INVALID'], 'Unautohorized', 401);
+    if(res){
+        return res.error(['TOKEN IS INVALID'], 'Unautohorized', 401);
+    }
+    return null
 }
 
 export {
