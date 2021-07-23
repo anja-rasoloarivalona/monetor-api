@@ -1,4 +1,4 @@
-import { User, UserAssociation, Budget, Settings, Wallet, TodoList, Todo, TodoChecklist, Transaction, Category } from '../models/index.js'
+import { User, UserAssociation, Budget, Settings, Wallet, TodoList, Todo, TodoChecklist, Transaction, Category, Message } from '../models/index.js'
 import { generateId } from '../utils/index.js'
 
 const createRelathionship = async data => {
@@ -48,6 +48,7 @@ const getUserByEMail = async email => {
 }
 
 const sanitizeUser = async userId => {
+
     const user = await User.findOne({
         where: { id: userId },
         include: [
@@ -74,20 +75,29 @@ const sanitizeUser = async userId => {
                 attributes: [
                     "id","confirmedAt"
                 ],
-                include: {
-                    model: User,
-                    attributes: [
-                        "id", "username", "email", "city", "country"
-                    ]
-                }
+                include: [
+                    {
+                        model: User,
+                        attributes: [
+                            "id", "username", "email", "city", "country"
+                        ]
+                    },
+                    {
+                        model: Message,
+                        as: "messages",
+                        limit: 1,
+                        order: [['createdAt', 'DESC']]
+                    },
+                ],
+
             },
             {
                 model: TodoList,
                 include: {
                     model: Todo,
-                    include: {
+                    include:  {
                         model: TodoChecklist,
-                        as: "checkList"
+                        as: "checkList",
                     }
                 }
             }

@@ -27,11 +27,6 @@ const requestFriendship = async (req, res) => {
     const errors = ev.validationResult(req)
     if(errors.isEmpty()){
         const { body : data, userId } = req
-
-        console.log({
-            data
-        })
-
         const { fromRelation } = await createRelathionship({
             fromId: userId,
             toId: data.toId

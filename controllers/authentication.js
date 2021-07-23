@@ -56,12 +56,6 @@ const login = async (req, res) => {
         const {  email, password } = req.body
         const user = await getUserByEMail(email)
         if(user){
-
-            console.log({
-                user,
-                password
-            })
-
             const passwordIsValid = verifyPassword(password, user.password)
             if(passwordIsValid){
                 const token = await generateAccessToken({
