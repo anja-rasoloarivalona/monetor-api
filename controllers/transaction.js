@@ -1,7 +1,6 @@
 import ev from 'express-validator'
 import { Transaction, Wallet, User, Category } from '../models/index.js'
 import { generateId } from '../utils/index.js'
-// import { sanitizeUser } from '../services/userService.js'
 
 const addTransaction = async (req, res) => {
     const errors = ev.validationResult(req)

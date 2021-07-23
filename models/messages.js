@@ -9,7 +9,7 @@ const Message = sequelize.define(
             allowNull: false,
             primaryKey: true
         },
-        assiociationId: {
+        associationId: {
             type: Sequelize.CHAR(32),
             allowNull: false,
             primaryKey: true,
@@ -18,6 +18,12 @@ const Message = sequelize.define(
         content: {
             type: Sequelize.STRING(2550),
             allowNull: false
+        },
+        toId: {
+            type: Sequelize.CHAR(32),
+            references: "User",
+            referencesKey: "id",
+            allowNull: false,
         },
         fromId: {
             type: Sequelize.CHAR(32),

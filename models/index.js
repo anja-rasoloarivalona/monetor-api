@@ -8,6 +8,7 @@ import { Wallet } from './wallet.js'
 import { Settings } from './settings.js'
 import { Todo, TodoList, TodoChecklist } from './todo.js'
 import { Transaction } from './transaction.js'
+import { Message } from './messages.js'
 
 Category.belongsTo(Category, {
     as: 'parent',
@@ -82,6 +83,11 @@ UserAssociation.hasOne(User, {
     foreignKey: "id",
 })
 
+UserAssociation.hasMany(Message, {
+    sourceKey: "id",
+    foreignKey: "associationId",
+    as: "messages"
+})
 
 export {
     Access,
@@ -97,5 +103,6 @@ export {
     Todo,
     TodoList,
     TodoChecklist,
-    Transaction
+    Transaction,
+    Message
 }

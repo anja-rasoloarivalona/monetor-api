@@ -1,6 +1,6 @@
 import { Server } from 'socket.io'
 import { verifyToken } from '../services/authService.js'
-
+import messages from './messages.js'
 
 const initSocket = server => {
 
@@ -47,13 +47,13 @@ const initSocket = server => {
                         connectedContacts.push(contact)
                     }
                 })
-
-                console.log({
-                    connectedContacts
-                })
-
                 connectedContacts.forEach(contactId => {
                     globalRoom.to(contactId).emit("contact-joined", userId)
+                })
+
+                messages({
+                    globalRoom,
+                    socket
                 })
                 return globalRoom.to(userId).emit("joined", connectedContacts)
             })
