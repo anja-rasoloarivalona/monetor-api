@@ -1,7 +1,8 @@
 import ev from 'express-validator'
 import { User, UserAssociation } from '../models/index.js'
 import Sequelize from 'sequelize'
-import { createRelathionship } from '../services/userService.js'
+import { createRelathionship, uploadeImage } from '../services/userService.js'
+
 
 const findUser = async (req, res) => {
     const errors = ev.validationResult(req)
@@ -36,7 +37,18 @@ const requestFriendship = async (req, res) => {
     return res.error(errors, 'Request friendship failed', 500)
 }
 
+const uploadeProfileImage = async(req, res) => {
+    const errors = ev.validationResult(req)
+    if(errors.isEmpty()){
+        const { file } = req
+        const uploaded = await uploadeImage(file)
+        return res.success(uploaded, "Test", 200)
+    }
+    return res.error(errors, 'Request friendship failed', 500)
+}
+
 export {
     findUser,
-    requestFriendship
+    requestFriendship,
+    uploadeProfileImage
 }

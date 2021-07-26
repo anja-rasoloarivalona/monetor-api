@@ -2,8 +2,10 @@ import express from 'express'
 import ev from 'express-validator'
 import { 
     findUser,
-    requestFriendship
+    requestFriendship,
+    uploadeProfileImage
 } from '../controllers/user.js'
+import multer from '../helpers/multer.js'
 
 const user = express.Router()
 
@@ -21,6 +23,15 @@ user.post(
         ev.check("toId").notEmpty()
     ],
     requestFriendship
+)
+
+
+user.post(
+    '/profile/image',
+    [
+        multer.singleImage
+    ],
+    uploadeProfileImage
 )
 
 export default user
