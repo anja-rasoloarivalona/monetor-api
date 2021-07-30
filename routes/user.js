@@ -3,7 +3,8 @@ import ev from 'express-validator'
 import { 
     findUser,
     requestFriendship,
-    uploadeProfileImage
+    uploadeProfileImage,
+    updateBalance
 } from '../controllers/user.js'
 import multer from '../helpers/multer.js'
 
@@ -32,6 +33,14 @@ user.post(
         multer.singleImage
     ],
     uploadeProfileImage
+)
+
+user.put(
+    '/balance',
+    [
+        ev.check('balance').notEmpty()
+    ],
+    updateBalance
 )
 
 export default user

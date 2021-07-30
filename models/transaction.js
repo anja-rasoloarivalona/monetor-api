@@ -24,7 +24,9 @@ const Transaction = sequelize.define(
         walletId: {
             type: Sequelize.CHAR(32),
             references: "Wallet",
-            referencesKey: "id"
+            referencesKey: "id",
+            allowNull: true,
+            defaultValue: null
         },
         date: {
             type: Sequelize.DATE,

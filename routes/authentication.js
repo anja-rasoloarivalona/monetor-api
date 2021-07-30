@@ -22,9 +22,9 @@ authentication.post(
     '/signup',
     [
         ev.check('email').isEmail().notEmpty(),
-        ev.check('username').notEmpty(),
+        ev.check('firstname').notEmpty(),
+        ev.check('lastname').notEmpty(),
         ev.check('password').notEmpty(),
-        // ev.check('lang').notEmpty(),
         ev.check('ipAddress').notEmpty(),
     ],
     signup

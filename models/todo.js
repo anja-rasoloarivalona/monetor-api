@@ -25,6 +25,9 @@ const TodoChecklist = sequelize.define(
         dueDate: {
             type: Sequelize.DATE
         },
+        startDate: {
+            type: Sequelize.DATE
+        },
         completedAt: {
             type: Sequelize.DATE
         },
@@ -69,6 +72,9 @@ const Todo = sequelize.define(
         dueDate: {
             type: Sequelize.DATE
         },
+        startDate: {
+            type: Sequelize.DATE
+        },
         completedAt: {
             type: Sequelize.DATE
         },
@@ -100,7 +106,7 @@ const TodoList = sequelize.define(
             allowNull: false,
             primaryKey: true
         },
-        userId: {
+        boardId: {
             type: Sequelize.CHAR(32),
             references: "user",
             referencesKey: "id",
@@ -128,8 +134,58 @@ const TodoList = sequelize.define(
     }
 )
 
+const TodoBoards = sequelize.define(
+    'todoBoards',
+    {
+        id: {
+            type: Sequelize.CHAR(32),
+            allowNull: false,
+            primaryKey: true
+        },
+        title: {
+            type: Sequelize.STRING(255),
+            allowNull: false
+        },
+    },
+    {
+        timestamps: true,
+        tableName: "todoBoards",
+        freezeTableName: true,
+    }
+)
+
+const UserTodoBoards = sequelize.define(
+    'userTodoBoards',
+    {
+        boardId: {
+            type: Sequelize.CHAR(32),
+            allowNull: false,
+            primaryKey: true
+        },
+        userId: {
+            type: Sequelize.CHAR(32),
+            allowNull: false,
+            primaryKey: true
+        },
+        isAdmin: {
+            type: Sequelize.BOOLEAN,
+            default: false
+        },
+        rule: {
+            type: Sequelize.INTEGER
+        }
+    },
+    {
+        timestamps: true,
+        tableName: "userTodoBoards",
+        freezeTableName: true,
+    }
+)
+
 export {
     TodoChecklist,
     Todo,
-    TodoList
+    TodoList,
+    TodoBoards,
+    UserTodoBoards
 }
