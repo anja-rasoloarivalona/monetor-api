@@ -16,17 +16,19 @@ const signup = async (req, res) => {
             const hashedPassword = await generateHashedPassword(data.password)
             const userId = generateId()
 
-            const user = await User.create({
+            await User.create({
                 id: userId,
-                username: data.username,
                 email: data.email,
+                firstname: data.firstname,
+                lastname: data.lastname,
                 password: hashedPassword,
                 city: data.city,
                 country: data.country,
                 province: data.province,
                 postalCode: data.postalCode,
                 lat: data.lat,
-                lng: data.lng
+                lng: data.lng,
+                balance: 0
             })
 
             await acceptTerms({
@@ -36,12 +38,10 @@ const signup = async (req, res) => {
             })
 
             const accessToken = await generateAccessToken({ userId, res })
-
+            const user = await sanitizeUser(userId)
             const response = {
                 token: accessToken,
-                id: user.id,
-                username: user.username,
-                email: user.email
+                ...user
             }
             return res.success(response, 'Signup successful', 201);  
         }

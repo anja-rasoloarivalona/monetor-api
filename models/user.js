@@ -9,13 +9,15 @@ const User = sequelize.define(
             allowNull: false,
             primaryKey: true
         },
-        username: {
-            type: Sequelize.STRING(64),
-            allowNull: false
-        },
         email: {
             type: Sequelize.STRING(255),
             allowNull: false
+        },
+        firstname: {
+            type: Sequelize.STRING(255),
+        },
+        lastname: {
+            type: Sequelize.STRING(255),
         },
         password: {
             type: Sequelize.STRING(255),
@@ -27,7 +29,8 @@ const User = sequelize.define(
         postalCode: Sequelize.STRING(255),
         lat: Sequelize.DOUBLE,
         lng: Sequelize.DOUBLE,
-        setupAt: Sequelize.DATE
+        setupAt: Sequelize.DATE,
+        balance: Sequelize.DOUBLE,
     },
     {   
         timestamps: false,

@@ -1,7 +1,6 @@
-import { User, UserAssociation, Budget, Settings, Wallet, TodoList, Todo, TodoChecklist, Transaction, Category, Message } from '../models/index.js'
+import { User, UserAssociation, Budget, Settings, Wallet, TodoBoards, UserTodoBoards, TodoList, Todo, TodoChecklist, Transaction, Category, Message, Image } from '../models/index.js'
 import { generateId } from '../utils/index.js'
-import { upload } from './storage/services.js'
-import { getFileExtention} from '../helpers/index.js'
+
 
 const createRelathionship = async data => {
     const {
@@ -81,7 +80,7 @@ const sanitizeUser = async userId => {
                     {
                         model: User,
                         attributes: [
-                            "id", "username", "email", "city", "country"
+                            "id", "firstname", "lastname", "email", "city", "country", "balance"
                         ]
                     },
                     {
@@ -94,14 +93,29 @@ const sanitizeUser = async userId => {
 
             },
             {
-                model: TodoList,
-                include: {
-                    model: Todo,
-                    include:  {
-                        model: TodoChecklist,
-                        as: "checkList",
+                model: UserTodoBoards,
+                as: "todoBoards",
+                attributes: [ "boardId", "isAdmin", "rule" ],
+                include: [
+                    {
+                        model: TodoBoards,
+                        attributes: ["title"],
+                        include: {
+                            model: TodoList,
+                            include: {
+                                model: Todo,
+                                include: {
+                                    model: TodoChecklist,
+                                    as: "checkList"
+                                }
+                            }
+                        }
                     }
-                }
+                ]
+            },
+            {
+                model: Image,
+                as: "images"
             }
         ]
     })
@@ -109,7 +123,9 @@ const sanitizeUser = async userId => {
 
     return {
         id: user.id,
-        username: user.username,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        balance: user.balance,
         email: user.email,
         budgets: user.budgets,
         settings: user.setting,
@@ -123,31 +139,35 @@ const sanitizeUser = async userId => {
         lat: user.lat,
         lng: user.lng,
         setupAt: user.setupAt,
-        contacts: user.contacts
+        contacts: user.contacts,
+        images: user.images,
+        todoBoards: user.todoBoards
     }
 }
 
-const uploadeImage = async file => {
-    const id = generateId();
-    const fileName = `${id}.${getFileExtention(file.originalname)}`;
-    const gc = await upload(
-        {
-            name: fileName,
-            folder: 'profile'
-        },
-        file
-    );
-    console.log({
-        gc
-    })
-    return gc
-}   
 
+const updateUserBalance = async (userId, value, action ) => {
+    const user = await User.findOne({
+        where: {
+            id: userId
+        }
+    })
+    if(!action){
+        return await user.update({
+            balance: value
+        })
+    }
+    const userBalance = parseFloat(user.balance)
+    const updatedBalance = action === "add" ? userBalance + value : userBalance - value                              
+    return await user.update({
+        balance: updatedBalance
+    })
+}
 
 export {
     getUserById,
     getUserByEMail,
     sanitizeUser,
     createRelathionship,
-    uploadeImage
+    updateUserBalance
 }

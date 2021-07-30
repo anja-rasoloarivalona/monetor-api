@@ -2,7 +2,7 @@ import { Todo, TodoChecklist, TodoList } from '../models/index.js'
 import { generateId } from '../utils/index.js'
 
 const create = async (data, userId) => {
-    const { type, title, index, todoId, todoListId, description, dueDate, labels } = data
+    const { type, title, index, todoId, todoListId, description,startDate, dueDate, labels } = data
     const id = generateId()
     switch(type){
         case "list":
@@ -20,7 +20,8 @@ const create = async (data, userId) => {
                 todoListId,
                 labels,
                 description,
-                dueDate
+                dueDate,
+                startDate
         })
         case "checkList":
             return await TodoChecklist.create({
@@ -29,7 +30,8 @@ const create = async (data, userId) => {
                 index,
                 todoId,
                 description,
-                dueDate
+                dueDate,
+                startDate
         })
         default: break;
     }
@@ -43,7 +45,7 @@ const updateMany = async data => {
 const updateOne = async data => {
     // update on item
 
-    const { type, id, title, index,   todoId, todoListId, description, dueDate, labels, completedAt } = data
+    const { type, id, title, index,   todoId, todoListId, description,startDate, dueDate, labels, completedAt } = data
 
     switch(type){
         case "list":
@@ -67,6 +69,7 @@ const updateOne = async data => {
                     labels,
                     description,
                     dueDate,
+                    startDate,
                     completedAt
                 },
                 {
@@ -84,6 +87,7 @@ const updateOne = async data => {
                     todoId,
                     description,
                     dueDate,
+                    startDate,
                     completedAt
                 }
             )

@@ -1,39 +1,29 @@
 import ev from 'express-validator'
 import { Transaction, Wallet, User, Category } from '../models/index.js'
 import { generateId } from '../utils/index.js'
+import { updateUserBalance } from '../services/userService.js'
+import { addTransactionHandler, editTransactionHandler, deleteTransactionHandler } from '../services/transactionService.js'
 
 const addTransaction = async (req, res) => {
     const errors = ev.validationResult(req)
     if(errors.isEmpty()){
         const { body: data, userId } = req
-
-        const { categoryId, amount, date, counterparty, walletId, type } = data
-
+        const {  amount, walletId, type } = data
         const usedWallet = await Wallet.findOne({
             where: {
                 id: walletId,
                 userId
             }
         })
-
         if(usedWallet){
             const updatedAmount =
                 type === "income" ? 
-                parseInt(usedWallet.amount)  + parseInt(amount) : 
-                parseInt(usedWallet.amount ) - parseInt(amount) 
-            
+                parseFloat(usedWallet.amount)  + parseFloat(amount) : 
+                parseFloat(usedWallet.amount ) - parseFloat(amount) 
             await usedWallet.update({ amount: updatedAmount })
-            await Transaction.upsert({
-                id: generateId(),
-                userId,
-                categoryId,
-                walletId,
-                date,
-                amount,
-                counterparty,
-                type
-            })
-
+        }
+        const isTransactionAdded = await addTransactionHandler(data, userId )
+        if(isTransactionAdded){
             const user = await User.findOne({
                 where: {
                     id: userId
@@ -55,7 +45,6 @@ const addTransaction = async (req, res) => {
             })
             return res.success(user, "Added transaction successfully", 200)
         }
-        return res.success([], "No wallet found", 404)
     }
     return res.success(errors, "Failed to add transaction", 500)
 }
