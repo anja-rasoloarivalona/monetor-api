@@ -10,6 +10,7 @@ import { Todo, TodoList, TodoChecklist, TodoBoards, UserTodoBoards } from './tod
 import { Transaction } from './transaction.js'
 import { Message } from './messages.js'
 import { Image } from './image.js'
+import { DashboardLayout, DashboardLayoutItem } from './dashboardLayout.js'
 
 Category.belongsTo(Category, {
     as: 'parent',
@@ -82,9 +83,6 @@ Todo.hasMany(TodoChecklist, {
     as: "checkList"
 })
 
-
-
-
 User.hasMany(Transaction, {
     sourceKey: "id",
     foreignKey: "userId",
@@ -120,6 +118,18 @@ User.hasMany(Image, {
     as: "images"
 })
 
+
+User.hasMany(DashboardLayout, {
+    sourceKey: "id",
+    foreignKey: "userId"
+})
+
+DashboardLayout.hasMany(DashboardLayoutItem, {
+    sourceKey: "id",
+    foreignKey: "layoutId"
+})
+
+
 export {
     Access,
     AccessTokens,
@@ -138,5 +148,7 @@ export {
     Message,
     Image,
     TodoBoards,
-    UserTodoBoards
+    UserTodoBoards,
+    DashboardLayout,
+    DashboardLayoutItem
 }

@@ -173,6 +173,9 @@ const UserTodoBoards = sequelize.define(
         },
         rule: {
             type: Sequelize.INTEGER
+        },
+        backgroundImage: {
+            type: Sequelize.CHAR(2550),
         }
     },
     {

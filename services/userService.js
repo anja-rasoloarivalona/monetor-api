@@ -95,7 +95,7 @@ const sanitizeUser = async userId => {
             {
                 model: UserTodoBoards,
                 as: "todoBoards",
-                attributes: [ "boardId", "isAdmin", "rule" ],
+                attributes: [ "boardId", "isAdmin", "rule", "backgroundImage" ],
                 include: [
                     {
                         model: TodoBoards,

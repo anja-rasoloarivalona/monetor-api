@@ -1,4 +1,5 @@
-import { Todo, TodoChecklist, TodoList } from '../models/index.js'
+import { Todo, TodoChecklist, TodoList,TodoBoards, UserTodoBoards } from '../models/index.js'
+import { updateDefaultBackground } from '../services/settingsService.js'
 import { generateId } from '../utils/index.js'
 
 const create = async (data, userId) => {
@@ -114,9 +115,29 @@ const deleteOne = async data => {
 }
 
 
+const setBoardBackgroundImage = async data => {
+    const { boardId, userId, imageUrl, isDefault } = data
+    let success = await UserTodoBoards.update({
+        backgroundImage: imageUrl
+    }, {
+        where: {
+            boardId,
+            userId
+        }
+    })
+    if(success && isDefault){
+        success = await updateDefaultBackground({
+            imageUrl,
+            userId
+        })
+    }
+    return success
+}
+
 export {
     create,
     updateOne,
     updateMany,
-    deleteOne
+    deleteOne,
+    setBoardBackgroundImage
 }

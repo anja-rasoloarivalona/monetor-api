@@ -13,6 +13,9 @@ const Settings = sequelize.define(
         },
         currency: {
             type: Sequelize.STRING(255)
+        },
+        defaultBackground: {
+            type: Sequelize.STRING(2550)
         }
     },
     {   

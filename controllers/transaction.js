@@ -23,6 +23,9 @@ const addTransaction = async (req, res) => {
             await usedWallet.update({ amount: updatedAmount })
         }
         const isTransactionAdded = await addTransactionHandler(data, userId )
+        console.log({
+            isTransactionAdded
+        })
         if(isTransactionAdded){
             const user = await User.findOne({
                 where: {
