@@ -6,6 +6,7 @@ import setup from './setup.js'
 import todo from './todo.js'
 import transaction from './transaction.js'
 import user from './user.js'
+import dashboardLayout from './dashboardLayout.js'
 
 const routes = express.Router()
 
@@ -18,5 +19,6 @@ routes.use("/setup", setup)
 routes.use("/todo", todo)
 routes.use("/transaction", transaction)
 routes.use("/user", user)
+routes.use('/dashboard-layout', dashboardLayout)
 
 export default routes

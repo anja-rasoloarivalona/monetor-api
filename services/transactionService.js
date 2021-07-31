@@ -8,15 +8,14 @@ const addTransactionHandler = async (data, userId) => {
         userId,
         ...data
     }
-    Promise.all(
+    const response = await Promise.all(
         [
-            Transaction.upsert(transaction),
-            updateUserBalance(userId, parseFloat(data.amount), "add")
+            await Transaction.upsert(transaction),
+            await updateUserBalance(userId, parseFloat(data.amount), "add")
         ]
-    ).then(response => {
-        const [ transactionInserted, userBalanceUpdated ] = response
-        return transactionInserted && userBalanceUpdated
-    })
+    )
+    const [ transactionInserted, userBalanceUpdated ] = response
+    return transactionInserted && userBalanceUpdated
 }
 
 const editTransactionHandler = async (data, userId) => {

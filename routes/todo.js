@@ -3,7 +3,8 @@ import ev from 'express-validator'
 import { 
     createHandler,
     updateHandler,
-    deleteHandler
+    deleteHandler,
+    updateBoardBackground
 } from '../controllers/todo.js'
 
 const todo = express.Router()
@@ -101,4 +102,17 @@ todo.delete(
     deleteHandler
 )
 
+
+todo.post(
+    '/board/background',
+    [
+        ev
+            .check("boardId")
+            .notEmpty(),
+        ev
+            .check("imageUrl")
+            .notEmpty()
+    ],
+    updateBoardBackground
+)
 export default todo
