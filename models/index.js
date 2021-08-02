@@ -11,6 +11,7 @@ import { Transaction } from './transaction.js'
 import { Message } from './messages.js'
 import { Image } from './image.js'
 import { DashboardLayout, DashboardLayoutItem } from './dashboardLayout.js'
+import { Note } from './note.js'
 
 Category.belongsTo(Category, {
     as: 'parent',
@@ -129,6 +130,11 @@ DashboardLayout.hasMany(DashboardLayoutItem, {
     foreignKey: "layoutId"
 })
 
+User.hasMany(Note, {
+    sourceKey: "id",
+    foreignKey: "userId",
+    as: "notes"
+})
 
 export {
     Access,
@@ -150,5 +156,6 @@ export {
     TodoBoards,
     UserTodoBoards,
     DashboardLayout,
-    DashboardLayoutItem
+    DashboardLayoutItem,
+    Note
 }
