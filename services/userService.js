@@ -1,4 +1,4 @@
-import { User, UserAssociation, Budget, Settings, Wallet, TodoBoards, UserTodoBoards, TodoList, Todo, TodoChecklist, Transaction, Category, Message, Image } from '../models/index.js'
+import { User, UserAssociation, Budget, Settings, Wallet, TodoBoards, UserTodoBoards, TodoList, Todo, TodoChecklist, Transaction, Category, Message, Image, Note } from '../models/index.js'
 import { generateId } from '../utils/index.js'
 
 
@@ -71,6 +71,10 @@ const sanitizeUser = async userId => {
                 }
             },
             {
+                model: Note,
+                as: "notes"
+            },
+            {
                 model: UserAssociation,
                 as: "contacts",
                 attributes: [
@@ -141,7 +145,8 @@ const sanitizeUser = async userId => {
         setupAt: user.setupAt,
         contacts: user.contacts,
         images: user.images,
-        todoBoards: user.todoBoards
+        todoBoards: user.todoBoards,
+        notes: user.notes
     }
 }
 
