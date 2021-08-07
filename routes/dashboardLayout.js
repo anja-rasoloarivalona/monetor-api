@@ -11,6 +11,7 @@ dashboardLayout.post(
     [
         ev
             .check('dashboardType')
+            .isIn(['main', 'transaction'])
             .notEmpty(),
         ev
             .check('items')

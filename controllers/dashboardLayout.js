@@ -9,7 +9,6 @@ const setLayout = async (req, res) => {
         const { layoutItems } = await setLayoutHandler({
             userId,
             items: data.items,
-            init: data.init,
             dashboardType: data.dashboardType
         })
         return res.success(layoutItems, "Items saved successfully", 200)
