@@ -1,4 +1,4 @@
-import { User, UserAssociation, Budget, Settings, Wallet, TodoBoards, UserTodoBoards, TodoList, Todo, TodoChecklist, Transaction, Category, Message, Image, Note, DashboardLayout, DashboardLayoutItem } from '../models/index.js'
+import { User, UserAssociation, Budget, Settings, Wallet, TodoBoards, UserTodoBoards, TodoList, Todo, TodoChecklist, Transaction, Category, Message, Image, Note, LayoutItem } from '../models/index.js'
 import { generateId } from '../utils/index.js'
 
 
@@ -75,14 +75,8 @@ const sanitizeUser = async userId => {
                 as: "notes"
             },
             {
-                model: DashboardLayout,
-                as: "layouts",
-                include: [
-                    {
-                        model: DashboardLayoutItem,
-                        as: "items"
-                    }
-                ]
+                model: LayoutItem,
+                as: "layoutItems",
             },
             {
                 model: UserAssociation,
@@ -156,7 +150,7 @@ const sanitizeUser = async userId => {
         images: user.images,
         todoBoards: user.todoBoards,
         notes: user.notes,
-        layouts: user.layouts
+        layoutItems: user.layoutItems
     }
 }
 
