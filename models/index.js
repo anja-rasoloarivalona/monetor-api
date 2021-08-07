@@ -10,7 +10,7 @@ import { Todo, TodoList, TodoChecklist, TodoBoards, UserTodoBoards } from './tod
 import { Transaction } from './transaction.js'
 import { Message } from './messages.js'
 import { Image } from './image.js'
-import { DashboardLayout, DashboardLayoutItem } from './dashboardLayout.js'
+import { LayoutItem } from './layoutItems.js'
 import { Note } from './note.js'
 
 Category.belongsTo(Category, {
@@ -120,16 +120,10 @@ User.hasMany(Image, {
 })
 
 
-User.hasMany(DashboardLayout, {
+User.hasMany(LayoutItem, {
     sourceKey: "id",
     foreignKey: "userId",
-    as: "layouts"
-})
-
-DashboardLayout.hasMany(DashboardLayoutItem, {
-    sourceKey: "id",
-    foreignKey: "id",
-    as: "items"
+    as: "layoutItems"
 })
 
 
@@ -158,7 +152,6 @@ export {
     Image,
     TodoBoards,
     UserTodoBoards,
-    DashboardLayout,
-    DashboardLayoutItem,
+    LayoutItem,
     Note
 }

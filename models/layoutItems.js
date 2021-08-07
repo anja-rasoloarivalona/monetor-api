@@ -1,39 +1,18 @@
 import Sequelize from 'sequelize';
 import sequelize from './sequelize.js'
 
-const DashboardLayout = sequelize.define(
-    'dashboardLayout',
+const LayoutItem = sequelize.define(
+    'layoutItem',
     {
-        id: {
-            type: Sequelize.CHAR(32),
-            allowNull: false,
-            primaryKey: true
-        },
         userId: {
             type: Sequelize.CHAR(32),
-            references: "User",
+            references: "user",
             referencesKey: "id",
             allowNull: false,
             primaryKey: true
         },
-        dashboardType: {
-            type: Sequelize.ENUM('main', 'transaction')
-        }
-    },
-    {   
-        timestamps: false,
-        tableName: 'dashboardLayout',
-        freezeTableName: true,
-    }
-)
-
-const DashboardLayoutItem = sequelize.define(
-    'dashboardLayoutItem',
-    {
         id: {
             type: Sequelize.CHAR(32),
-            references: "dashboardLayout",
-            referencesKey: "id",
             allowNull: false,
             primaryKey: true
         },
@@ -53,24 +32,25 @@ const DashboardLayoutItem = sequelize.define(
             type: Sequelize.INTEGER,
             allowNull: false,
         },
-        name: {
+        i: {
             type: Sequelize.STRING(255),
             allowNull: false,
         },
         breakpoint: {
             type: Sequelize.CHAR(3),
             allowNull: false
+        },
+        layout: {
+            type: Sequelize.ENUM('main', 'transactions')
         }
     },
     {   
         timestamps: false,
-        tableName: 'dashboardLayoutItem',
+        tableName: 'layoutItems',
         freezeTableName: true,
     }
 )
 
-
 export {
-    DashboardLayout,
-    DashboardLayoutItem
+    LayoutItem
 }
