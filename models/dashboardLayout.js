@@ -30,7 +30,7 @@ const DashboardLayout = sequelize.define(
 const DashboardLayoutItem = sequelize.define(
     'dashboardLayoutItem',
     {
-        layoutId: {
+        id: {
             type: Sequelize.CHAR(32),
             references: "dashboardLayout",
             referencesKey: "id",
@@ -68,6 +68,7 @@ const DashboardLayoutItem = sequelize.define(
         freezeTableName: true,
     }
 )
+
 
 export {
     DashboardLayout,

@@ -122,13 +122,16 @@ User.hasMany(Image, {
 
 User.hasMany(DashboardLayout, {
     sourceKey: "id",
-    foreignKey: "userId"
+    foreignKey: "userId",
+    as: "layouts"
 })
 
 DashboardLayout.hasMany(DashboardLayoutItem, {
     sourceKey: "id",
-    foreignKey: "layoutId"
+    foreignKey: "id",
+    as: "items"
 })
+
 
 User.hasMany(Note, {
     sourceKey: "id",
