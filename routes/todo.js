@@ -4,7 +4,9 @@ import { 
     createHandler,
     updateHandler,
     deleteHandler,
-    updateBoardBackground
+    updateBoardBackground,
+    addLabel,
+    removeLabel
 } from '../controllers/todo.js'
 
 const todo = express.Router()
@@ -14,21 +16,36 @@ todo.post(
     [
         ev
             .check('type')
-            .isIn(['list', 'todo', 'checkList']),
+            .isIn(['list', 'todo', 'checkList', 'label']),
         ev
             .check('title')
             .notEmpty(),
         ev
             .check('index')
+            .if((value, {req}) => {
+                return req.body.type !== "label"
+            })
             .notEmpty(),
          ev
             .check('todoListId')
-            .if((value, {req}) => req.body.type === "todo")
+            .if((value, {req}) => {
+                if(!req.body.unlisted){
+                    return req.body.type === "todo"
+                } return false
+            })
             .notEmpty(),
         ev
             .check('todoId')
             .if((value, {req}) => req.body.type === "checkList")
-            .notEmpty()
+            .notEmpty(),
+        ev
+            .check('color')
+            .if((value, {req}) =>  req.body.type === "label")
+            .notEmpty(),
+        ev
+            .check('boardId')
+            .if((value, {req}) =>  req.body.type === "label")
+            .notEmpty(),
     ],
     createHandler
 )
@@ -38,12 +55,15 @@ todo.put(
     [
         ev
             .check('type')
-            .isIn(['list', 'todo', 'checkList']),
+            .isIn(['list', 'todo', 'checkList', 'label']),
         ev
             .check('title')
             .notEmpty(),
         ev
             .check('index')
+            .if((value, {req}) => {
+                return req.body.type !== "label"
+            })
             .notEmpty(),
          ev
             .check('todoListId')
@@ -52,7 +72,11 @@ todo.put(
         ev
             .check('todoId')
             .if((value, {req}) => req.body.type === "checkList")
-            .notEmpty()
+            .notEmpty(),
+         ev
+            .check('color')
+            .if((value, {req}) =>  req.body.type === "label")
+            .notEmpty(),
     ],
     updateHandler
 )
@@ -70,6 +94,10 @@ todo.put(
             .notEmpty(),
         ev
             .body('*.index')
+            .if((value, {req}) => {
+                const current = req.body.find( i => i.id === value.id)
+                return current.type !== "label"
+            })
             .notEmpty(),
          ev
             .body('*.todoListId')
@@ -84,7 +112,14 @@ todo.put(
                 const current = req.body.find( i => i.id === value.id)
                 return current.type === "checkList"
             })
-            .notEmpty()
+            .notEmpty(),
+        ev
+            .body('*.color')
+            .if((value, {req}) =>  {
+                const current = req.body.find( i => i.id === value.id)
+                return current.type === "label"
+            })
+            .notEmpty(),
     ],
     updateHandler
 )
@@ -94,7 +129,7 @@ todo.delete(
     [
         ev
             .check('type')
-            .isIn(['list', 'todo', 'checkList']),
+            .isIn(['list', 'todo', 'checkList', 'label']),
         ev
             .check('id')
             .notEmpty()
@@ -115,4 +150,31 @@ todo.post(
     ],
     updateBoardBackground
 )
+
+todo.post(
+    '/label',
+    [
+        ev
+            .check('todoId')
+            .notEmpty(),
+        ev
+            .check('labelId')
+            .notEmpty(),
+    ],
+    addLabel
+)
+
+todo.delete(
+    '/label',
+    [
+        ev
+            .check('todoId')
+            .notEmpty(),
+        ev
+            .check('labelId')
+            .notEmpty(),
+    ],
+    removeLabel
+)
+
 export default todo

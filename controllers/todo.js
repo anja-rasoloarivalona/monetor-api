@@ -1,7 +1,7 @@
 import ev from 'express-validator'
 import { User, Todo, TodoList } from '../models/index.js'
 import { generateId, isArray } from '../utils/index.js'
-import { create, updateOne, updateMany, deleteOne, setBoardBackgroundImage } from '../services/todoService.js'
+import { create, updateOne, updateMany, deleteOne, setBoardBackgroundImage, todoAddLabel, todoRemoveLabel } from '../services/todoService.js'
 
 
 const createHandler = async (req, res) => {
@@ -13,7 +13,6 @@ const createHandler = async (req, res) => {
     }
     return res.error(errors, `Creating failed`, 500)
 }
-
 
 const updateHandler = async (req, res) => {
     const errors = ev.validationResult(req)
@@ -56,10 +55,37 @@ const updateBoardBackground = async(req, res) => {
     return res.error(errors, 'Updating background failed', 500)
 }
 
+const addLabel = async(req, res) => {
+    const errors = ev.validationResult(req)
+    if(errors.isEmpty()){
+        const { body: data } = req
+        const added = await todoAddLabel(data)
+        if(added){
+            return res.success([], `Label added to  todo successfully`, 200)
+        }
+    }
+    return res.error(errors, 'Failed to add todo label', 500)
+}
+
+
+const removeLabel = async(req, res) => {
+    const errors = ev.validationResult(req)
+    if(errors.isEmpty()){
+        const { body: data } = req
+        const success = await todoRemoveLabel(data)
+        if(success){
+            return res.success([], 'Label removed from todo successfully', 200)
+        }
+    }
+    return res.error(errors, 'Failed to remove todo label', 500)
+}
+
 export {
     createHandler,
     updateHandler,
     deleteHandler,
-    updateBoardBackground
+    updateBoardBackground,
+    addLabel,
+    removeLabel
 }
 

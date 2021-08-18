@@ -1,4 +1,4 @@
-import { User, UserAssociation, Budget, Settings, Wallet, TodoBoards, UserTodoBoards, TodoList, Todo, TodoChecklist, Transaction, Category, Message, Image, Note, LayoutItem } from '../models/index.js'
+import { User, UserAssociation, Budget, Settings, Wallet, TodoBoards, UserTodoBoards, TodoList, Todo, TodoLabels, TodoChecklist, Transaction, Category, Message, Image, Note, LayoutItem, TodoLabelsAssociation } from '../models/index.js'
 import { generateId } from '../utils/index.js'
 
 
@@ -108,16 +108,29 @@ const sanitizeUser = async userId => {
                     {
                         model: TodoBoards,
                         attributes: ["title"],
-                        include: {
-                            model: TodoList,
-                            include: {
-                                model: Todo,
+                        include: [
+                            {
+                                model: TodoList,
                                 include: {
-                                    model: TodoChecklist,
-                                    as: "checkList"
+                                    model: Todo,
+                                    include: [
+                                        {
+                                            model: TodoChecklist,
+                                            as: "checkList"
+                                        },
+                                        {
+                                            model: TodoLabels,
+                                            as: "todoLabels",
+                                            attributes: ['boardId', 'id']
+                                        }
+                                    ]
                                 }
                             }
-                        }
+                        ]
+                    },
+                    {
+                        model: TodoLabels,
+                        as: "labels"
                     }
                 ]
             },

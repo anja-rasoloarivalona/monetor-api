@@ -7,7 +7,7 @@ import { 
 const settings = express.Router()
 
 settings.post(
-    "/",
+    "/default-background",
     [
         ev
             .check("imageUrl")
@@ -16,4 +16,4 @@ settings.post(
     setDefaultBackground
 )
 
-export default transaction
+export default settings
