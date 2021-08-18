@@ -8,6 +8,7 @@ import transaction from './transaction.js'
 import user from './user.js'
 import layoutItems from './layoutItems.js'
 import note from './note.js'
+import settings from './settings.js'
 
 const routes = express.Router()
 
@@ -22,5 +23,6 @@ routes.use("/transaction", transaction)
 routes.use("/user", user)
 routes.use('/layout-items', layoutItems)
 routes.use("/note", note)
+routes.use("/settings", settings)
 
 export default routes

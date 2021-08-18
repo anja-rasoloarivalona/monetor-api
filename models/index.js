@@ -6,7 +6,7 @@ import { Category, CategoryLocale } from './category.js'
 import { Budget } from './budget.js'
 import { Wallet } from './wallet.js'
 import { Settings } from './settings.js'
-import { Todo, TodoList, TodoChecklist, TodoBoards, UserTodoBoards } from './todo.js'
+import { Todo, TodoList, TodoChecklist, TodoBoards, TodoLabels, TodoLabelsAssociation, UserTodoBoards } from './todo.js'
 import { Transaction } from './transaction.js'
 import { Message } from './messages.js'
 import { Image } from './image.js'
@@ -63,6 +63,17 @@ UserTodoBoards.hasOne(TodoBoards, {
     foreignKey: "id"
 })
 
+UserTodoBoards.hasMany(TodoLabels, {
+    sourceKey: "boardId",
+    foreignKey: "boardId",
+    as: "labels"
+})
+
+TodoLabels.belongsTo(UserTodoBoards, {
+    sourceKey: "boardId",
+    foreignKey: "boardId",
+})
+
 TodoBoards.belongsTo(UserTodoBoards, {
     sourceKey: "userId",
     foreignKey: "id"
@@ -73,6 +84,7 @@ TodoBoards.hasMany(TodoList, {
     foreignKey: "boardId"
 })
 
+
 TodoList.hasMany(Todo, {
     sourceKey: "id",
     foreignKey: "todoListId"
@@ -82,6 +94,20 @@ Todo.hasMany(TodoChecklist, {
     sourceKey: "id",
     foreignKey: "todoId",
     as: "checkList"
+})
+
+Todo.belongsToMany(TodoLabels, {
+    through: TodoLabelsAssociation,
+    as: "todoLabels",
+    foreignKey: "todoId",
+    sourceKey: "id"
+})
+
+TodoLabels.belongsToMany(Todo, {
+    through: TodoLabelsAssociation,
+    as: "todos",
+    foreignKey: "labelId",
+    sourceKey: "id"
 })
 
 User.hasMany(Transaction, {
@@ -147,6 +173,8 @@ export {
     Todo,
     TodoList,
     TodoChecklist,
+    TodoLabels,
+    TodoLabelsAssociation,
     Transaction,
     Message,
     Image,

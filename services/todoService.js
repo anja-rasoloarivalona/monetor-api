@@ -1,9 +1,9 @@
-import { Todo, TodoChecklist, TodoList,TodoBoards, UserTodoBoards } from '../models/index.js'
+import { Todo, TodoChecklist, TodoList, TodoLabels, TodoLabelsAssociation, UserTodoBoards } from '../models/index.js'
 import { updateDefaultBackground } from '../services/settingsService.js'
 import { generateId } from '../utils/index.js'
 
 const create = async (data, userId) => {
-    const { type, title, index, todoId, todoListId, description,startDate, dueDate, labels } = data
+    const { type, title, index, todoId, todoListId, description,startDate, dueDate, boardId, color } = data
     const id = generateId()
     switch(type){
         case "list":
@@ -14,16 +14,20 @@ const create = async (data, userId) => {
                 index,
         })
         case "todo":
-            return await Todo.create({
+            const payload = {
                 id,
                 title,
                 index,
-                todoListId,
-                labels,
                 description,
                 dueDate,
                 startDate
-        })
+            }
+            if(todoListId){
+                payload.todoListId = todoListId
+            } else {
+                payload.userId = userId
+            }
+            return await Todo.create(payload)
         case "checkList":
             return await TodoChecklist.create({
                 id,
@@ -34,6 +38,13 @@ const create = async (data, userId) => {
                 dueDate,
                 startDate
         })
+        case "label": 
+            return await TodoLabels.create({
+                id,
+                boardId,
+                title,
+                color
+            })
         default: break;
     }
 }
@@ -44,9 +55,8 @@ const updateMany = async data => {
 }
 
 const updateOne = async data => {
-    // update on item
 
-    const { type, id, title, index,   todoId, todoListId, description,startDate, dueDate, labels, completedAt } = data
+    const { type, id, title, index,   todoId, todoListId, description,startDate, dueDate, completedAt, color } = data
 
     switch(type){
         case "list":
@@ -67,7 +77,6 @@ const updateOne = async data => {
                     title,
                     index,
                     todoListId,
-                    labels,
                     description,
                     dueDate,
                     startDate,
@@ -79,7 +88,7 @@ const updateOne = async data => {
                     }
                 },
             )
-        case "checkList": {
+        case "checkList": 
             return await TodoChecklist.upsert(
                 {
                     id: id || generateId(),
@@ -92,7 +101,18 @@ const updateOne = async data => {
                     completedAt
                 }
             )
-        }
+        case "label":
+            return await TodoLabels.update({
+                tilte: title,
+                color: color
+            },
+                {
+                    where: {
+                        id
+                    }
+                }
+            )
+        default: break;
     }
 }
 
@@ -111,9 +131,16 @@ const deleteOne = async data => {
             return await TodoChecklist.destroy({
                 where: { id }
             })
+        case "label": 
+            return await TodoLabels.destroy({
+                where: {
+                    id
+                }
+            })
+        default: break;
+        
     }
 }
-
 
 const setBoardBackgroundImage = async data => {
     const { boardId, userId, imageUrl, isDefault } = data
@@ -134,10 +161,30 @@ const setBoardBackgroundImage = async data => {
     return success
 }
 
+const todoAddLabel = async data => {
+    const { todoId, labelId } = data
+    return await TodoLabelsAssociation.create({
+        todoId,
+        labelId
+    })
+}
+
+const todoRemoveLabel = async data=> {
+    const { todoId, labelId } = data
+    return await TodoLabelsAssociation.destroy({
+        where: {
+            todoId,
+            labelId
+        }
+    })
+}
+
 export {
     create,
     updateOne,
     updateMany,
     deleteOne,
-    setBoardBackgroundImage
+    setBoardBackgroundImage,
+    todoAddLabel,
+    todoRemoveLabel
 }

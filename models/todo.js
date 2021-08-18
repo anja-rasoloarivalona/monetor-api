@@ -36,7 +36,7 @@ const TodoChecklist = sequelize.define(
             allowNull: false
         },
         type: {
-            type: Sequelize.STRING(9),
+            type: Sequelize.CHAR(9),
             allowNull: false,
             defaultValue: "checkList"
         }
@@ -58,9 +58,13 @@ const Todo = sequelize.define(
         },
         todoListId: {
             type: Sequelize.CHAR(32),
-            allowNull: false,
             references: "todoList",
             referencesKey: "id",
+        },
+        userId: {
+            type: Sequelize.CHAR(32),
+            references: "user",
+            referencesKey: "id"
         },
         title: {
             type: Sequelize.STRING(255),
@@ -86,7 +90,7 @@ const Todo = sequelize.define(
             type: Sequelize.STRING(255)
         },
         type: {
-            type: Sequelize.STRING(4),
+            type: Sequelize.CHAR(4),
             allowNull: false,
             defaultValue: "todo"
         }
@@ -108,7 +112,7 @@ const TodoList = sequelize.define(
         },
         boardId: {
             type: Sequelize.CHAR(32),
-            references: "user",
+            references: "todoBoards",
             referencesKey: "id",
             allowNull: false,
             primaryKey: true
@@ -122,7 +126,7 @@ const TodoList = sequelize.define(
             allowNull: false
         },
         type: {
-            type: Sequelize.STRING(4),
+            type: Sequelize.CHAR(4),
             allowNull: false,
             defaultValue: "list"
         }
@@ -154,18 +158,82 @@ const TodoBoards = sequelize.define(
     }
 )
 
+const TodoLabels = sequelize.define(
+    'todoLabels',
+    {
+        id: {
+            type: Sequelize.CHAR(32),
+            allowNull: false,
+            primaryKey: true
+        },
+        boardId: {
+            type: Sequelize.CHAR(32),
+            allowNull: false,
+            references: "todoBoards",
+            referencesKey: "id"
+        },
+        title: {
+            type: Sequelize.CHAR(255),
+            allowNull: false
+        },
+        color: {
+            type: Sequelize.STRING(50),
+            allowNull: false
+        },
+        type: {
+            type: Sequelize.CHAR(5),
+            allowNull: false,
+            defaultValue: "label"
+        }
+    },
+    {
+        timestamps: false,
+        tableName: "todoLabels",
+        freezeTableName: true,
+    }
+)
+
+const TodoLabelsAssociation = sequelize.define(
+    'todoLabelsAssociation',
+    {
+        todoId: {
+            type: Sequelize.CHAR(32),
+            allowNull: false,
+            primaryKey: true,
+            references: "todo",
+            referencesKey: "id"
+        },
+        labelId: {
+            type: Sequelize.CHAR(32),
+            allowNull: false,
+            primaryKey: true,
+            references: "todoLabels",
+            referencesKey: "id"
+        }
+    },
+    {
+        timestamps: false,
+        tableName: "todolabelsassociation",
+        freezeTableName: true,
+    }
+)
+
 const UserTodoBoards = sequelize.define(
     'userTodoBoards',
     {
         boardId: {
             type: Sequelize.CHAR(32),
             allowNull: false,
-            primaryKey: true
+            primaryKey: true,
+            references: "todoBoards",
+            referencesKey: "id"
         },
         userId: {
             type: Sequelize.CHAR(32),
             allowNull: false,
-            primaryKey: true
+            primaryKey: true,
+            references: "user",
+            referencesKey: "id"
         },
         isAdmin: {
             type: Sequelize.BOOLEAN,
@@ -190,5 +258,7 @@ export {
     Todo,
     TodoList,
     TodoBoards,
+    TodoLabels,
+    TodoLabelsAssociation,
     UserTodoBoards
 }
