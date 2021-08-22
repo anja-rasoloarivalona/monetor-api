@@ -4,10 +4,14 @@ import { 
     createHandler,
     updateHandler,
     deleteHandler,
+    initBoardHandler,
+    getUserBoardsHandler,
     updateBoardBackground,
     addLabel,
-    removeLabel
+    removeLabel,
+    addAttachment,
 } from '../controllers/todo.js'
+import multer from '../helpers/multer.js'
 
 const todo = express.Router()
 
@@ -141,11 +145,9 @@ todo.delete(
 todo.post(
     '/board/background',
     [
+        multer.singleFile,
         ev
             .check("boardId")
-            .notEmpty(),
-        ev
-            .check("imageUrl")
             .notEmpty()
     ],
     updateBoardBackground
@@ -175,6 +177,42 @@ todo.delete(
             .notEmpty(),
     ],
     removeLabel
+)
+
+todo.post(
+    '/attachment',
+    [
+        multer.singleFile,
+        ev
+            .check('ownerId')
+            .notEmpty()
+    ],
+    addAttachment
+)
+
+todo.post(
+    '/board',
+    [
+        ev
+            .check('title')
+            .notEmpty(),
+        ev
+            .check('todoList')
+            .isArray(),
+        ev
+            .check('todoList.*.title')
+            .notEmpty(),
+        ev
+            .check('todoList.*.index')
+            .notEmpty()  
+    ],
+    initBoardHandler
+)
+
+todo.get(
+    '/boards',
+    [],
+    getUserBoardsHandler
 )
 
 export default todo

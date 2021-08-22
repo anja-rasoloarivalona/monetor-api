@@ -1,8 +1,19 @@
 import ev from 'express-validator'
-import { User, Todo, TodoList } from '../models/index.js'
+import { User, Todo, TodoList, UserTodoBoards } from '../models/index.js'
 import { generateId, isArray } from '../utils/index.js'
-import { create, updateOne, updateMany, deleteOne, setBoardBackgroundImage, todoAddLabel, todoRemoveLabel } from '../services/todoService.js'
+import { create, updateOne, updateMany, deleteOne, setBoardBackgroundImage, todoAddLabel, todoRemoveLabel, initBoard, getUserBoard, getUserBoards } from '../services/todoService.js'
+import { createAttachment } from '../services/attachmentService.js'
 
+
+const getUserBoardsHandler = async(req, res) => {
+    const errors = ev.validationResult(req)
+    if(errors.isEmpty()){
+        const { userId } = req
+        const todoBoards =  await getUserBoards(userId)
+        return res.success(todoBoards, `User todo boards fetched successfully`, 200)
+    }
+    return res.error(errors, `Faield to get user boards`, 500)
+}
 
 const createHandler = async (req, res) => {
     const errors = ev.validationResult(req)
@@ -41,15 +52,19 @@ const deleteHandler = async (req, res) => {
 const updateBoardBackground = async(req, res) => {
     const errors = ev.validationResult(req)
     if(errors.isEmpty()){
-        const { body : { boardId, imageUrl, isDefault}, userId } = req
-        const success = await  setBoardBackgroundImage({
+        const { body : { boardId, imageUrl, isDefault}, userId, file } = req
+        const uploadedImageUrl = await  setBoardBackgroundImage({
             boardId,
             imageUrl,
             isDefault,
-            userId
+            userId,
+            file
         })
-        if(success){
-            return res.success([], `Background updated successfully`, 200)
+        console.log({
+            uploadedImageUrl
+        })
+        if(uploadedImageUrl){
+            return res.success(uploadedImageUrl, `Background updated successfully`, 200)
         }
     }
     return res.error(errors, 'Updating background failed', 500)
@@ -67,7 +82,6 @@ const addLabel = async(req, res) => {
     return res.error(errors, 'Failed to add todo label', 500)
 }
 
-
 const removeLabel = async(req, res) => {
     const errors = ev.validationResult(req)
     if(errors.isEmpty()){
@@ -80,12 +94,45 @@ const removeLabel = async(req, res) => {
     return res.error(errors, 'Failed to remove todo label', 500)
 }
 
+const addAttachment = async(req, res) => {
+    const errors = ev.validationResult(req)
+    if(errors.isEmpty()){
+        const { body: data, file } = req
+        const attachment = await createAttachment({
+            ...data,
+            file,
+            ownerType: 'todo'
+        })
+        if(attachment){
+            return res.success(attachment, 'Attachment created successfully', 200)
+        }
+    }
+    return res.error(errors, 'Failed add attachment', 500)
+}
+
+const initBoardHandler = async(req, res) => {
+    const errors = ev.validationResult(req)
+    if(errors.isEmpty()){
+        const { body: data, userId } = req
+        const newBoard = await initBoard(data, userId)
+        if(newBoard){
+            const boardId = newBoard.board.id
+            const sanitized = await getUserBoard(userId, boardId)
+            return res.success(sanitized, 'TodoBoard created successfully', 200)
+        }
+    }
+    return res.error(errors, 'Failed to create todoboard', 500)
+}
+
 export {
     createHandler,
     updateHandler,
     deleteHandler,
     updateBoardBackground,
     addLabel,
-    removeLabel
+    removeLabel,
+    addAttachment,
+    initBoardHandler,
+    getUserBoardsHandler
 }
 

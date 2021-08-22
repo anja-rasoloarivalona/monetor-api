@@ -12,6 +12,7 @@ import { Message } from './messages.js'
 import { Image } from './image.js'
 import { LayoutItem } from './layoutItems.js'
 import { Note } from './note.js'
+import { Attachment } from './attachment.js'
 
 Category.belongsTo(Category, {
     as: 'parent',
@@ -96,12 +97,18 @@ Todo.hasMany(TodoChecklist, {
     as: "checkList"
 })
 
+Todo.hasMany(Attachment, {
+    sourceKey: "id",
+    foreignKey: "ownerId",
+})
+
 Todo.belongsToMany(TodoLabels, {
     through: TodoLabelsAssociation,
     as: "todoLabels",
     foreignKey: "todoId",
     sourceKey: "id"
 })
+
 
 TodoLabels.belongsToMany(Todo, {
     through: TodoLabelsAssociation,
@@ -121,6 +128,12 @@ Transaction.hasOne(Category, {
     foreignKey: "id",
     as: "category"
 })
+
+Transaction.hasMany(Attachment, {
+    sourceKey: "id",
+    foreignKey: "ownerId",
+})
+
 
 User.hasMany(UserAssociation, {
     sourceKey: "id",
@@ -159,6 +172,11 @@ User.hasMany(Note, {
     as: "notes"
 })
 
+Note.hasMany(Attachment, {
+    sourceKey: "id",
+    foreignKey: "ownerId",
+})
+
 export {
     Access,
     AccessTokens,
@@ -181,5 +199,6 @@ export {
     TodoBoards,
     UserTodoBoards,
     LayoutItem,
-    Note
+    Note,
+    Attachment
 }
