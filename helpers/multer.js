@@ -5,5 +5,6 @@ const multer = Multer({
 })
 
 export default {
-    singleImage: multer.single('image')
+    singleImage: multer.single('image'),
+    singleFile: multer.single('file')
 }
