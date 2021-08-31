@@ -73,8 +73,9 @@ const updateOne = async data => {
                 }
             )
         case "todo":
-            return await Todo.update(
+            return await Todo.upsert(
                 {
+                    id,
                     title,
                     index,
                     todoListId,
@@ -83,11 +84,7 @@ const updateOne = async data => {
                     startDate,
                     completedAt
                 },
-                {
-                    where: {
-                        id
-                    }
-                },
+
             )
         case "checkList": 
             return await TodoChecklist.upsert(

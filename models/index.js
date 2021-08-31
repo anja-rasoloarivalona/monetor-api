@@ -11,7 +11,7 @@ import { Transaction } from './transaction.js'
 import { Message } from './messages.js'
 import { Image } from './image.js'
 import { LayoutItem } from './layoutItems.js'
-import { Note } from './note.js'
+import { Note, NotesFolder } from './note.js'
 import { Attachment } from './attachment.js'
 
 Category.belongsTo(Category, {
@@ -165,11 +165,33 @@ User.hasMany(LayoutItem, {
     as: "layoutItems"
 })
 
+User.hasMany(NotesFolder, {
+    sourceKey: "id",
+    foreignKey: "userId",
+})
+
+NotesFolder.hasMany(Note, {
+    sourceKey: "id",
+    foreignKey: "folderId",
+})
+
+
+NotesFolder.belongsTo(NotesFolder, {
+    as: 'parent',
+    sourceKey: "id",
+    foreignKey: "parentId"
+})
+
+NotesFolder.hasMany(NotesFolder, {
+    as: 'children',
+    sourceKey: "id",
+    foreignKey: "parentId",
+})
 
 User.hasMany(Note, {
     sourceKey: "id",
     foreignKey: "userId",
-    as: "notes"
+    as: "quickNotes"
 })
 
 Note.hasMany(Attachment, {
@@ -200,5 +222,6 @@ export {
     UserTodoBoards,
     LayoutItem,
     Note,
+    NotesFolder,
     Attachment
 }

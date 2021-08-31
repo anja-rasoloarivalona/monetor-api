@@ -70,10 +70,10 @@ const sanitizeUser = async userId => {
                     as: "category"
                 }
             },
-            {
-                model: Note,
-                as: "notes"
-            },
+            // {
+            //     model: Note,
+            //     as: "quickNotes"
+            // },
             {
                 model: LayoutItem,
                 as: "layoutItems",
@@ -164,8 +164,9 @@ const sanitizeUser = async userId => {
         setupAt: user.setupAt,
         contacts: user.contacts,
         images: user.images,
+        noteSynchronisedAt: user.noteSynchronisedAt,
         // todoBoards: user.todoBoards,
-        notes: user.notes,
+        // notes: user.quickNotes,
         layoutItems: user.layoutItems
     }
 }
@@ -189,10 +190,22 @@ const updateUserBalance = async (userId, value, action ) => {
     })
 }
 
+const updateNoteSynchronisationDate = async (date, userId) => {
+    return await User.update(
+        { noteSynchronisedAt: date },
+        {
+            where: {
+                id: userId
+            }
+        }
+    )
+}
+
 export {
     getUserById,
     getUserByEMail,
     sanitizeUser,
     createRelathionship,
-    updateUserBalance
+    updateUserBalance,
+    updateNoteSynchronisationDate
 }

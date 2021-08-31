@@ -31,6 +31,7 @@ const User = sequelize.define(
         lng: Sequelize.DOUBLE,
         setupAt: Sequelize.DATE,
         balance: Sequelize.DOUBLE,
+        noteSynchronisedAt: Sequelize.DATE
     },
     {   
         timestamps: false,
