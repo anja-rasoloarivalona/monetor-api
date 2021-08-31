@@ -4,6 +4,7 @@ import { getUserById, getUserByEMail} from '../services/userService.js'
 import { User, AccessTokens } from '../models/index.js'
 import { generateId } from '../utils/index.js'
 import { sanitizeUser } from '../services/userService.js'
+import { getIpDetails } from '../helpers/index.js'
 
 const signup = async (req, res) => {
     const errors = ev.validationResult(req)
@@ -80,6 +81,9 @@ const login = async (req, res) => {
 const verifyAccessToken = async (req, res) => {
     const errors = ev.validationResult(req)
     if(errors.isEmpty()){
+
+        getIpDetails(req)
+
         const { token } = req.body
         const tokenData = verifyToken(token, res);
         const { userId, shouldRefreshToken } = tokenData
