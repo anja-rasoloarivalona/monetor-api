@@ -25,7 +25,6 @@ authentication.post(
         ev.check('firstname').notEmpty(),
         ev.check('lastname').notEmpty(),
         ev.check('password').notEmpty(),
-        ev.check('ipAddress').notEmpty(),
     ],
     signup
 )

@@ -25,10 +25,6 @@ const User = sequelize.define(
         },
         city: Sequelize.STRING(255),
         country: Sequelize.STRING(255),
-        province: Sequelize.STRING(255),
-        postalCode: Sequelize.STRING(255),
-        lat: Sequelize.DOUBLE,
-        lng: Sequelize.DOUBLE,
         setupAt: Sequelize.DATE,
         balance: Sequelize.DOUBLE,
         noteSynchronisedAt: Sequelize.DATE

@@ -15,15 +15,16 @@ const getIpDetails = async req => {
             ipDetails: res
         })
         if(res){
+            const { data } = res
             return {
-                id: res.ip,
-                city: res.city,
-                region: res.region,
-                country: res.country,
-                lat: res.latitude,
-                lng: res.longitude,
-                regionCode: res.region_code,
-                countryCode: res.country_code
+                id: data.ip,
+                city: data.city,
+                region: data.region,
+                country: data.country,
+                lat: data.latitude,
+                lng: data.longitude,
+                regionCode: data.region_code,
+                countryCode: data.country_code
             }
         }
         return null

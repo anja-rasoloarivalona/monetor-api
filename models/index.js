@@ -13,6 +13,7 @@ import { Image } from './image.js'
 import { LayoutItem } from './layoutItems.js'
 import { Note, NotesFolder } from './note.js'
 import { Attachment } from './attachment.js'
+import { Location } from './location.js'
 
 Category.belongsTo(Category, {
     as: 'parent',
@@ -44,6 +45,11 @@ User.hasOne(Settings, {
 })
 
 User.hasMany(Wallet, {
+    sourceKey: "id",
+    foreignKey: "userId"
+})
+
+User.hasMany(Location, {
     sourceKey: "id",
     foreignKey: "userId"
 })
@@ -223,5 +229,6 @@ export {
     LayoutItem,
     Note,
     NotesFolder,
-    Attachment
+    Attachment,
+    Location
 }

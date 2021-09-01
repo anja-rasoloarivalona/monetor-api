@@ -1,8 +1,8 @@
 import Sequelize from 'sequelize';
 import sequelize from "./sequelize.js";
 
-const Weather = sequelize.define(
-    'weather',
+const Location = sequelize.define(
+    'location',
     {
         id: {
             type: Sequelize.CHAR(32),
@@ -47,11 +47,11 @@ const Weather = sequelize.define(
     },
     {   
         timestamps: false,
-        tableName: 'Weather',
+        tableName: 'Location',
         freezeTableName: true,
     }
 )
 
 export {
-    Weather
+    Location
 }
