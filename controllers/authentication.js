@@ -5,6 +5,8 @@ import { User, AccessTokens } from '../models/index.js'
 import { generateId } from '../utils/index.js'
 import { sanitizeUser } from '../services/userService.js'
 import { getIpDetails } from '../helpers/index.js'
+import requestIp from 'request-ip'
+import { addLocation } from '../services/locationService.js'
 
 const signup = async (req, res) => {
     const errors = ev.validationResult(req)
@@ -16,6 +18,35 @@ const signup = async (req, res) => {
         if(!existingUser){
             const hashedPassword = await generateHashedPassword(data.password)
             const userId = generateId()
+            const ipAddress = requestIp.getClientIp(req)
+            let locationData = {
+                id: generateId(),
+                userId
+            }   
+            console.log({
+                data
+            })         
+            if(data.lat && data.lng){
+                locationData = {
+                    ...locationData,
+                    city: data.city,
+                    region: data.region,
+                    country: data.country,
+                    lat: data.lat,
+                    lng: data.lng,
+                    regionCode: data.regionCode,
+                    countryCode: data.countryCode 
+                }
+            } else {
+                locationData = {
+                    ...locationData,
+                    ...getIpDetails(req)
+                }
+            }
+
+            console.log({
+                locationData
+            })
 
             await User.create({
                 id: userId,
@@ -23,18 +54,18 @@ const signup = async (req, res) => {
                 firstname: data.firstname,
                 lastname: data.lastname,
                 password: hashedPassword,
-                city: data.city,
-                country: data.country,
-                province: data.province,
-                postalCode: data.postalCode,
-                lat: data.lat,
-                lng: data.lng,
-                balance: 0
+                city: locationData.city,
+                country: locationData.country,
+                balance: 0,
             })
+
+          
+  
+            const location = await addLocation(userId, locationData)
 
             await acceptTerms({
                 userId,
-                ipAddress: data.ipAddress,
+                ipAddress,
                 version: "1.0.0"
             })
 
@@ -42,7 +73,10 @@ const signup = async (req, res) => {
             const user = await sanitizeUser(userId)
             const response = {
                 token: accessToken,
-                ...user
+                ...user,
+                locations: [
+                    location
+                ]
             }
             return res.success(response, 'Signup successful', 201);  
         }

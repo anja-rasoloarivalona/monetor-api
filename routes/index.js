@@ -9,6 +9,7 @@ import user from './user.js'
 import layoutItems from './layoutItems.js'
 import note from './note.js'
 import settings from './settings.js'
+import location from './location.js'
 
 const routes = express.Router()
 
@@ -24,5 +25,6 @@ routes.use("/user", user)
 routes.use('/layout-items', layoutItems)
 routes.use("/note", note)
 routes.use("/settings", settings)
+routes.use("/location", location)
 
 export default routes
